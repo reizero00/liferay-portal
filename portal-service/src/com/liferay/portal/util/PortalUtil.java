@@ -336,6 +336,10 @@ public class PortalUtil {
 		return getPortal().getComputerAddress();
 	}
 
+	public static Set<String> getComputerAddresses() {
+		return getPortal().getComputerAddresses();
+	}
+
 	public static String getComputerName() {
 		return getPortal().getComputerName();
 	}
