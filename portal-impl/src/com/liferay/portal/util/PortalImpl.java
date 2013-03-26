@@ -816,9 +816,9 @@ public class PortalImpl implements Portal {
 
 				String hostAddress = inetAddress.getHostAddress();
 
-				String serverIp = getComputerAddress();
+				Set<String> serverIps = getComputerAddresses();
 
-				boolean serverIpIsHostAddress = serverIp.equals(hostAddress);
+				boolean serverIpIsHostAddress = serverIps.contains(hostAddress);
 
 				for (String ip : allowedIps) {
 					if ((serverIpIsHostAddress && ip.equals("SERVER_IP")) ||
