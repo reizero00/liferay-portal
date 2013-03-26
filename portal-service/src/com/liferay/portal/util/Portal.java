@@ -468,6 +468,8 @@ public interface Portal {
 
 	public String getComputerAddress();
 
+	public Set<String> getComputerAddresses();
+
 	public String getComputerName();
 
 	public String getControlPanelCategory(

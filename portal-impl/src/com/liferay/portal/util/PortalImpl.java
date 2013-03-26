@@ -205,6 +205,8 @@ import java.io.Serializable;
 import java.lang.reflect.Method;
 
 import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.net.UnknownHostException;
 
 import java.util.ArrayList;
@@ -305,6 +307,39 @@ public class PortalImpl implements Portal {
 			catch (UnknownHostException uhe) {
 			}
 		}
+
+		Set<String> computerAddresses = new HashSet<String>();
+
+		Enumeration<NetworkInterface> networkInterfaces = null;
+
+		try {
+			networkInterfaces = NetworkInterface.getNetworkInterfaces();
+		}
+		catch (SocketException e) {
+		}
+
+		if (networkInterfaces != null) {
+			while (networkInterfaces.hasMoreElements()) {
+				NetworkInterface networkInterface =
+					networkInterfaces.nextElement();
+
+				Enumeration<InetAddress> inetAddresses =
+					networkInterface.getInetAddresses();
+
+				while (inetAddresses.hasMoreElements()) {
+					InetAddress inetAddress = inetAddresses.nextElement();
+
+					String address = inetAddress.getHostAddress();
+
+					computerAddresses.add(address);
+				}
+			}
+		}
+		else {
+			computerAddresses.add(_computerAddress);
+		}
+
+		_computerAddresses = Collections.unmodifiableSet(computerAddresses);
 
 		// Paths
 
@@ -1343,6 +1378,10 @@ public class PortalImpl implements Portal {
 
 	public String getComputerAddress() {
 		return _computerAddress;
+	}
+
+	public Set<String> getComputerAddresses() {
+		return _computerAddresses;
 	}
 
 	public String getComputerName() {
@@ -6541,6 +6580,7 @@ public class PortalImpl implements Portal {
 		PropsValues.PORTLET_RESOURCE_ID_BANNED_PATHS_REGEXP,
 		Pattern.CASE_INSENSITIVE);
 	private String _computerAddress;
+	private Set<String> _computerAddresses;
 	private String _computerName;
 	private String[] _customSqlKeys;
 	private String[] _customSqlValues;
